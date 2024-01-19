@@ -1,0 +1,183 @@
+.text
+main: 
+li $v0, 4
+la $a0, prompt1
+syscall
+
+li $v0, 5 
+syscall
+move $s0, $v0 
+
+li $v0, 4
+la $a0, prompt2
+syscall
+
+li $v0, 5
+syscall
+move $s1, $v0 
+add $s2, $s0, $s1 
+
+li $v0, 4
+la $a0, output
+syscall
+
+li $v0, 1 
+move $a0, $s2 
+syscall 
+li $v0, 10 
+syscall 
+.data 
+prompt1: .asciiz "Please enter the first number: "
+prompt2: .asciiz "Please enter the second number: "
+output: .asciiz "\nThe result is: "
+
+====================================
+
+2. Area of the Square
+.text
+main: #default program
+li $v0, 4
+la $a0, prompt
+syscall
+li $v0, 5
+syscall
+move $s0, $v0
+mul $s1, $s0, $s0 #multiply $s0 and $s0 since area = s^2 and
+
+#ma save ang value sa $s1
+
+li $v0, 4
+la $a0, output
+syscall
+li $v0, 1
+move $a0, $s1
+syscall
+li $v0, 10
+syscall
+.data #stored info
+prompt: .asciiz "Please enter the side value of the square: "
+output: .asciiz "\nThe are of the square is: "
+
+====================================
+
+3. Perimeter of the Rectangle
+.text
+main: #default program
+li $v0, 4
+la $a0, prompt1
+syscall
+li $v0, 5
+syscall
+move $s0, $v0
+li $v0, 4
+la $a0, prompt2
+syscall
+li $v0, 5
+syscall
+move $s1, $v0
+mul $s2, $s0, 2 #value of the length x 2
+mul $s3, $s1, 2 #value of the width x 2
+add $s4, $s2, $s3 #perimeter is 2L+2W
+li $v0, 4
+la $a0, output
+syscall
+li $v0, 1
+move $a0, $s4
+syscall
+li $v0, 10
+syscall
+.data #stored info
+prompt1: .asciiz "Please enter the length of the rectangle: "
+prompt2: .asciiz "Please enter the width of the rectangle: "
+output: .asciiz "\nThe perimeter of the rectangle is: "
+
+====================================
+# Purpose: To illustrate implementing and calling a
+# subprogram named Exit.
+.text
+main:
+# read an input value from the user
+li $v0, 4
+la $a0, prompt
+syscall
+
+li $v0, 5
+syscall
+
+move $s0, $v0
+# print the value back to the user
+li $v0, 4
+la $a0, result
+syscall
+
+li $v0, 1
+move $a0, $s0
+syscall
+
+# call the Exit subprogram to exit
+jal Exit
+.data
+prompt: .asciiz "Please enter an integer: "
+result: .asciiz "\nYou entered: "
+# subprogram: Exit
+# purpose: to use syscall service 10 to exit a program
+# input: None
+# output: None
+# side effects: The program is exited
+.text
+Exit:
+li $v0, 10
+syscall
+
+
+=========================
+
+# Purpose: To illustrate implementing and calling a
+# subprogram named PrintNewLine.
+.text
+main:
+# read an input value from the user
+li $v0, 4
+la $a0, prompt
+syscall
+
+li $v0, 5
+syscall
+move $s0, $v0
+# print the value back to the user
+jal PrintNewLine
+li $v0, 4
+la $a0, result
+syscall
+li $v0, 1
+move $a0, $s0
+syscall
+# call the Exit subprogram to exit
+jal Exit
+.data
+prompt: .asciiz "Please enter an integer: "
+result: .asciiz "You entered: "
+# subprogram: PrintNewLine
+# purpose: to output a new line to the user console
+# input: None
+# output: None
+# side effects: A new line character is printed to the
+# user's console
+.text
+PrintNewLine:
+li $v0, 4
+la $a0, __PNL_newline
+syscall
+jr $ra
+.data
+__PNL_newline: .asciiz "\n"
+# subprogram: Exit
+# purpose: to use syscall service 10 to exit a program
+# input: None
+# output: None
+# side effects: The program is exited
+.text
+Exit:
+li $v0, 10
+syscall
+=============
